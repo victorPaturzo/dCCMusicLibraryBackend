@@ -1,5 +1,6 @@
 const express = require("express");
 const repoContext = require("./MusicLibraryStarterCode/repository/repository-wrapper");
+const { validateSong } = require("./MusicLibraryStarterCode/middleware/songs-validation");
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.get("/api/songs", (req, res) => {
     return res.send(songs);
 });
 
-app.get("/api/products/:id", (req, res) => {
+app.get("/api/songs/:id", (req, res) => {
     const id = req.params.id;
     const song = repoContext.songs.findSongById(id);
     return res.send(song);
@@ -39,3 +40,4 @@ app.delete("/api/songs/:id", (req, res) => {
     const updatedDataSet = repoContext.songs.deleteSong(id);
     return res.send(updatedDataSet);
 });
+
