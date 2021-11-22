@@ -1,9 +1,11 @@
 const express = require("express");
 const repoContext = require("./MusicLibraryStarterCode/repository/repository-wrapper");
+const cors = require("cors");
 const { validateSong } = require("./MusicLibraryStarterCode/middleware/songs-validation");
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 
@@ -22,13 +24,13 @@ app.get("/api/songs/:id", (req, res) => {
     return res.send(song);
 });
 
-app.post("/api/songs", (req, res) => {
+app.post("/api/songs", [validateSong], (req, res) => {
     const newSong = req.body;
     const addedSong = repoContext.songs.createSong(newSong);
     return res.send(addedSong);
 });
 
-app.put("/api/songs/:id", (req, res) => {
+app.put("/api/songs/:id", [validateSong], (req, res) => {
     const id = req.params.id;
     const songPropertiesToUpdate = req.body;
     const updatedSong = repoContext.songs.updateSong(id, songPropertiesToUpdate);
